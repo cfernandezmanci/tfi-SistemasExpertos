@@ -8,7 +8,7 @@ clips.Clear()
 #Clips Reset
 clips.Reset()
 
-temp = clips.BuildTemplate("empresa","""
+varClipTemplateEmpresa = """
     (slot eid (type INTEGER))
     (slot nombre (type STRING))
     (slot tipo (type STRING))
@@ -17,7 +17,11 @@ temp = clips.BuildTemplate("empresa","""
     (slot pais (type STRING))
     (slot comercioext (type STRING))
     (slot puntaje (type INTEGER))
- """, "Template para empresas")
+ """
+
+print varClipTemplateEmpresa
+
+temp = clips.BuildTemplate("empresa",varClipTemplateEmpresa, "Template para empresas")
 
 
 tcomp = clips.BuildTemplate("compra","""
@@ -156,7 +160,7 @@ for f in li:
         pool_eid2 = f.Slots['eid2']
         pool_nombre2 = f.Slots['nombre2']
         pool_compra = f.Slots['compra']
-        print "Pool. %s - %s %s " % (pool_nombre,pool_nombre2, pool_compra)
+        print "Pool. (Empresa1) %s %s - (Empresa2) %s %s - (Compra) %s " % (pool_eid,pool_nombre,pool_eid2,pool_nombre2, pool_compra)
 
 
 
