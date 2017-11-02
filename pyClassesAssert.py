@@ -7,7 +7,7 @@ import pyClasses
 
 '''DEFINICIONES'''
 
-DIRECTORIO = "/home/fernandezc/PycharmProjects/TFIClips/"
+DIRECTORIO = "/home/christian/tfiClips/"
 
 '''CARGA EMPRESAS '''
 
@@ -116,6 +116,46 @@ enlaceLista.leeAssertTemplate(tempEnlace)
 enlaceLista.putAssertTemplate(tempEnlace,varCamposTemp,enlace)
 
 
+'''HECHOS (FACTS) GENERADOS MEDIANTE REGLAS'''
 
-clips.PrintFacts()
+'''CARGA POOLCOMPRAS '''
+
+
+poolComprasLista = pyClasses.Entidad()
+
+varClipTemplateNombre = """poolcompras"""
+varClipTemplateDatos = """
+    (slot eid (type INTEGER))
+    (slot nombre (type STRING))
+    (slot eid2 (type INTEGER))
+    (slot nombre2 (type STRING))        
+    (slot compra (type STRING))
+ """
+varClipTemplateComentario = """Es Template poolCompras"""
+
+tempPoolCompras = poolComprasLista.addAssertTemplate(varClipTemplateNombre,varClipTemplateDatos,varClipTemplateComentario)
+poolComprasLista.leeAssertTemplate(tempPoolCompras)
+
+'''CARGA GRUPOEXPORTACION '''
+
+grupoExportacionLista = pyClasses.Entidad()
+
+varClipTemplateNombre = """grupoexportacion"""
+varClipTemplateDatos = """
+    (slot eid (type INTEGER))
+    (slot nombre (type STRING))
+    (slot eid2 (type INTEGER))
+    (slot nombre2 (type STRING))
+    (slot pais (type STRING))
+    (slot categoria (type STRING))
+    (slot comercioext (type STRING))        
+    (slot venta (type STRING))
+ """
+varClipTemplateComentario = """Es Template Grupo de Exportacion"""
+
+tempGrupoExp = poolComprasLista.addAssertTemplate(varClipTemplateNombre,varClipTemplateDatos,varClipTemplateComentario)
+grupoExportacionLista.leeAssertTemplate(tempGrupoExp)
+
+
+#clips.PrintFacts()
 clips.Clear()
