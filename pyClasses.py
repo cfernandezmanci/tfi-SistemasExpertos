@@ -44,3 +44,113 @@ class Entidad():
                 indice =  indice +1
             f1.Assert()
 
+
+class Empresas():
+    def __init__(self,archivoEmp):
+       self.archivoEmpresas = archivoEmp
+
+    def setArchivoEmpresas(self,archivo):
+        self.archivoEmpresas= archivo
+
+    def setEmpresa(self,empresa):
+        empresaPuntaje = Entidad()
+        empresaPuntaje.putArchivo(self.archivoEmpresas)
+        empresaPuntaje.leerArchivo()
+        emprePun = empresaPuntaje.getDatosArchivo()
+
+        for row1 in iter(emprePun):
+            if row1[0] == empresa:
+                return row1[7]
+
+        return 0
+
+
+class Enlaces():
+    def __init__(self,archivoEnl):
+       self.archivoEnlaces = archivoEnl
+
+    def setArchivoEnlaces(self,archivo):
+        self.archivoEnlaces= archivo
+
+    def setEnlaces(self,enlaces):
+        enlaceValor = Entidad()
+        enlaceValor.putArchivo(self.archivoEnlaces)
+        enlaceValor.leerArchivo()
+        enlaceVal = enlaceValor.getDatosArchivo()
+
+        for row1 in iter(enlaceVal):
+            if row1[0] == enlaces:
+                print row1[3]
+                if int(row1[3]) >= 90:
+                    return "EXELENTE"
+                elif int(row1[3]) >= 80:
+                    return "MUY BUENO"
+                elif int(row1[3]) >= 70:
+                    return "BUENO"
+                elif int(row1[3]) >= 60:
+                    return "REGULAR"
+                elif int(row1[3]) < 60:
+                    return "MALO"
+                else:
+                    return "MALO"
+
+
+class Paises():
+    def __init__(self,archivoCont,archivoRel):
+        self.archivoPaisesCont = archivoCont
+        self.archivoPaisesRel = archivoRel
+
+    def setArchivoPaisesCont(self,archivo):
+        self.archivoPaisesCont = archivo
+
+    def setArchivoPaisesRel(self,archivo):
+        self.archivoPaisesRel= archivo
+
+    def setPaises(self,pais1,pais2):
+
+        if pais1==pais2:
+            return "LOCAL"
+        else:
+            paisListaCont = Entidad()
+            paisListaCont.putArchivo(self.archivoPaisesCont)
+            paisListaCont.leerArchivo()
+            paisContinente = paisListaCont.getDatosArchivo()
+
+            paisListaRel = Entidad()
+            paisListaRel.putArchivo(self.archivoPaisesRel)
+            paisListaRel.leerArchivo()
+            paisRelacion = paisListaRel.getDatosArchivo()
+
+            for row1 in iter(paisRelacion):
+                if (row1[0] == pais1 and row1[1] == pais2) or (row1[0] == pais2 and row1[1] == pais1):
+                    return "LIMITROFE"
+
+            pais1Cont = ""
+            pais2Cont = ""
+            for row2 in iter(paisContinente):
+                if row2[0] == pais1:
+                    pais1Cont = row2[1]
+                if row2[0] == pais2:
+                    pais2Cont = row2[1]
+
+            if pais1Cont == pais2Cont:
+                return "REGIONAL"
+
+            return "MUNDIAL"
+
+
+class comentarios():
+    def __init__(self, archivoCom):
+        self.archivoComentarios = archivoCom
+
+        def setArchivoComentarios(self, archivo):
+            self.archivoComentarios = archivo
+
+        def getComentarios(self):
+            comentarioDatos = Entidad()
+            comentarioDatos.putArchivo(self.archivoComentarios)
+            comentarioDatos.leerArchivo()
+            comentarios = comentarioDatos.getDatosArchivo()
+
+            return comentarios
+

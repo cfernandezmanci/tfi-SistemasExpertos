@@ -35,7 +35,6 @@ tempEmpresa = emplista.addAssertTemplate(varClipTemplateNombre,varClipTemplateDa
 emplista.leeAssertTemplate(tempEmpresa)
 emplista.putAssertTemplate(tempEmpresa,varCamposTemp,empre)
 
-#clips.PrintFacts()
 
 '''CARGA COMPRAS '''
 
@@ -116,6 +115,80 @@ enlaceLista.leeAssertTemplate(tempEnlace)
 enlaceLista.putAssertTemplate(tempEnlace,varCamposTemp,enlace)
 
 
+'''CARGA COMENTARIOS '''
+
+comentariolista = pyClasses.Entidad()
+comentariolista.putArchivo(DIRECTORIO + "comentarios_1.csv")
+comentariolista.leerArchivo()
+coment = comentariolista.getDatosArchivo()
+
+varClipTemplateNombre = """comentario"""
+varClipTemplateDatos = """
+    (slot comid (type INTEGER))
+    (slot tipo (type STRING))
+    (slot eid (type INTEGER))
+    (slot eid2 (type INTEGER))
+    (slot mensaje (type STRING))
+ """
+varClipTemplateComentario = """Es Template Comentarios"""
+
+varCamposTemp = ["comid","tipo","eid","eid2","mensaje"]
+
+tempComentario = comentariolista.addAssertTemplate(varClipTemplateNombre,varClipTemplateDatos,varClipTemplateComentario)
+comentariolista.leeAssertTemplate(tempComentario)
+comentariolista.putAssertTemplate(tempComentario,varCamposTemp,coment)
+
+'''CARGA BUSQUEDAS'''
+
+busquedalista = pyClasses.Entidad()
+busquedalista.putArchivo(DIRECTORIO + "busquedas_1.csv")
+busquedalista.leerArchivo()
+busq = busquedalista.getDatosArchivo()
+
+varClipTemplateNombre = """busqueda"""
+varClipTemplateDatos = """
+    (slot busid (type INTEGER))
+    (slot termino (type STRING))
+    (slot eid (type INTEGER))
+    (slot eid2 (type INTEGER))
+ """
+varClipTemplateComentario = """Es Template busqueda"""
+
+varCamposTemp = ["busid","termino","eid","eid2"]
+
+tempBusqueda = busquedalista.addAssertTemplate(varClipTemplateNombre,varClipTemplateDatos,varClipTemplateComentario)
+busquedalista.leeAssertTemplate(tempBusqueda)
+busquedalista.putAssertTemplate(tempBusqueda,varCamposTemp,busq)
+
+
+'''CARGA ACCESOS'''
+
+accesolista = pyClasses.Entidad()
+accesolista.putArchivo(DIRECTORIO + "accesos_1.csv")
+accesolista.leerArchivo()
+acces = accesolista.getDatosArchivo()
+
+
+varClipTemplateNombre = """accesos"""
+varClipTemplateDatos = """
+    (slot accid (type INTEGER))
+    (slot fecha (type STRING))
+    (slot eid (type INTEGER))
+ """
+varClipTemplateComentario = """Es Template acceso"""
+
+varCamposTemp = ["accid","fecha","eid"]
+
+tempAcceso = accesolista.addAssertTemplate(varClipTemplateNombre,varClipTemplateDatos,varClipTemplateComentario)
+accesolista.leeAssertTemplate(tempAcceso)
+accesolista.putAssertTemplate(tempAcceso,varCamposTemp,acces)
+
+
+
+
+
+
+
 '''HECHOS (FACTS) GENERADOS MEDIANTE REGLAS'''
 
 '''CARGA POOLCOMPRAS '''
@@ -135,6 +208,7 @@ varClipTemplateComentario = """Es Template poolCompras"""
 
 tempPoolCompras = poolComprasLista.addAssertTemplate(varClipTemplateNombre,varClipTemplateDatos,varClipTemplateComentario)
 poolComprasLista.leeAssertTemplate(tempPoolCompras)
+
 
 '''CARGA GRUPOEXPORTACION '''
 
@@ -157,5 +231,6 @@ tempGrupoExp = poolComprasLista.addAssertTemplate(varClipTemplateNombre,varClipT
 grupoExportacionLista.leeAssertTemplate(tempGrupoExp)
 
 
-#clips.PrintFacts()
+clips.PrintFacts()
 clips.Clear()
+
