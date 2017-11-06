@@ -1,8 +1,11 @@
 import clips
-import csv
 import pyClasses
 
+#Clips Clear
+clips.Clear()
 
+#Clips Reset
+clips.Reset()
 
 
 '''DEFINICIONES'''
@@ -186,13 +189,75 @@ accesolista.putAssertTemplate(tempAcceso,varCamposTemp,acces)
 
 
 
-
-
-
 '''HECHOS (FACTS) GENERADOS MEDIANTE REGLAS'''
 
-'''CARGA POOLCOMPRAS '''
 
+empcompLista = pyClasses.Entidad()
+
+varClipTemplateNombre = """empcomp"""
+varClipTemplateDatos = """
+    (slot sid (type INTEGER))
+    (slot sid2 (type INTEGER))
+    (slot eid (type INTEGER))
+    (slot eid2 (type INTEGER))        
+    (slot nombre (type STRING))
+ """
+varClipTemplateComentario = """Es Template EmpresaCompras"""
+
+
+tempEmpComp = empcompLista.addAssertTemplate(varClipTemplateNombre,varClipTemplateDatos,varClipTemplateComentario)
+empcompLista.leeAssertTemplate(tempEmpComp)
+
+
+empexpLista = pyClasses.Entidad()
+
+varClipTemplateNombre = """empexp"""
+varClipTemplateDatos = """
+    (slot eid (type INTEGER))
+    (slot comercioext (type STRING))
+ """
+varClipTemplateComentario = """Es Template EmpresaExporta"""
+
+
+tempEmpExp = empexpLista.addAssertTemplate(varClipTemplateNombre,varClipTemplateDatos,varClipTemplateComentario)
+empexpLista.leeAssertTemplate(tempEmpExp)
+
+
+empventLista = pyClasses.Entidad()
+
+varClipTemplateNombre = """empvent"""
+varClipTemplateDatos = """
+    (slot pid (type INTEGER))
+    (slot eid (type INTEGER))
+    (slot pid2 (type INTEGER))
+    (slot eid2 (type INTEGER))        
+    (slot nombre (type STRING))
+ """
+varClipTemplateComentario = """Es Template EmpresaVentas"""
+
+tempEmpVent = empventLista.addAssertTemplate(varClipTemplateNombre,varClipTemplateDatos,varClipTemplateComentario)
+empventLista.leeAssertTemplate(tempEmpVent)
+
+
+empcatpaisLista = pyClasses.Entidad()
+
+varClipTemplateNombre = """empresacatpais"""
+varClipTemplateDatos = """
+    (slot eid (type INTEGER))
+    (slot nombre (type STRING))
+    (slot eid2 (type INTEGER))
+    (slot nombre2 (type STRING))        
+    (slot categoria (type STRING))
+    (slot pais (type STRING))
+ """
+varClipTemplateComentario = """Template para EmpresasCatPais"""
+
+tempEmpCatPais = empcatpaisLista.addAssertTemplate(varClipTemplateNombre,varClipTemplateDatos,varClipTemplateComentario)
+empcatpaisLista.leeAssertTemplate(tempEmpCatPais)
+
+
+
+'''CARGA POOLCOMPRAS '''
 
 poolComprasLista = pyClasses.Entidad()
 
@@ -202,6 +267,8 @@ varClipTemplateDatos = """
     (slot nombre (type STRING))
     (slot eid2 (type INTEGER))
     (slot nombre2 (type STRING))        
+    (slot categoria (type STRING))
+    (slot pais (type STRING))    
     (slot compra (type STRING))
  """
 varClipTemplateComentario = """Es Template poolCompras"""
@@ -220,8 +287,8 @@ varClipTemplateDatos = """
     (slot nombre (type STRING))
     (slot eid2 (type INTEGER))
     (slot nombre2 (type STRING))
-    (slot pais (type STRING))
     (slot categoria (type STRING))
+    (slot pais (type STRING))
     (slot comercioext (type STRING))        
     (slot venta (type STRING))
  """
@@ -231,6 +298,126 @@ tempGrupoExp = poolComprasLista.addAssertTemplate(varClipTemplateNombre,varClipT
 grupoExportacionLista.leeAssertTemplate(tempGrupoExp)
 
 
+''' REGLAS '''
+
+print "REGLAS"
+
+
+clips.SendCommand("""
+(defrule empcatpais
+  (empresa (eid ?eid)(nombre ?nombre) (categoria ?categoria) (pais ?pais))         
+  (empresa (eid ?eid2)(nombre ?nombre2) (categoria ?categoria2) (pais ?pais2))
+   (and(test(eq ?categoria ?categoria2)) (test(neq ?eid ?eid2)) (test(eq ?pais ?pais2)) )  
+  =>
+  (assert(empresacatpais (eid ?eid) (nombre ?nombre) (eid2 ?eid2) (nombre2 ?nombre2) (categoria ?categoria) (pais ?pais) ))
+ )
+""")
+
+clips.SendCommand("""
+(defrule empresaventa
+  (venta (pid ?pid) (eid ?eid) (nombre ?nombre))
+  (venta (pid ?pid2) (eid ?eid2) (nombre ?nombre2))
+  (and(test(eq ?nombre ?nombre2)) (test(neq ?pid ?pid2)) (test(neq ?eid ?eid2)) )  
+  =>
+  (assert(empvent (pid ?pid) (eid ?eid) (pid2 ?pid2) (eid2 ?eid2) (nombre ?nombre) ))
+ )
+""")
+
+clips.SendCommand("""
+(defrule empresacompra
+  (compra (sid ?sid) (eid ?eid) (nombre ?nombre))
+  (compra (sid ?sid2) (eid ?eid2) (nombre ?nombre2))
+  (and(test(eq ?nombre ?nombre2)) (test(neq ?sid ?sid2)) (test(neq ?eid ?eid2)) )  
+  =>
+  (assert(empcomp (sid ?sid) (sid2 ?sid2) (eid ?eid) (eid2 ?eid2) (nombre ?nombre) ))
+ )
+""")
+
+clips.SendCommand("""
+(defrule empresaexporta
+  (empresa (eid ?eid) (comercioext ?comercioext & "EXPORTA"|"EXPIMP")) 
+  =>
+  (assert(empexp (eid ?eid) (comercioext ?comercioext) ))
+ )
+""")
+
+
+clips.SendCommand("""
+(defrule poolcompras
+  (empresacatpais (eid ?eid) (nombre ?nombre) (eid2 ?eid2) (nombre2 ?nombre2) (categoria ?categoria) (pais ?pais) )
+  (empcomp (sid ?ecsid) (sid2 ?ecsid2) (eid ?eceid) (eid2 ?eceid2) (nombre ?compra))
+  (and(test(eq ?eceid ?eid)) (test(eq ?eceid2 ?eid2))  )  
+  =>
+  (assert(poolcompras (eid ?eid) (nombre ?nombre) (eid2 ?eid2) (nombre2 ?nombre2) (categoria ?categoria) (pais ?pais) (compra ?compra)))
+ )
+""")
+
+
+
+clips.SendCommand("""
+(defrule grupoexportacion
+  (empresacatpais (eid ?eid) (nombre ?nombre) (eid2 ?eid2) (nombre2 ?nombre2) (categoria ?categoria) (pais ?pais) )
+  (empvent (pid ?evpid) (eid ?eveid) (pid2 ?evpid2) (eid2 ?eveid2) (nombre ?venta))
+  (empexp (eid ?expeid) (comercioext ?comercioext))
+  (and(test(eq ?eveid ?eid)) (test(eq ?eveid2 ?eid2)) )
+  =>
+  (assert(grupoexportacion (eid ?eid) (nombre ?nombre) (eid2 ?eid2) (nombre2 ?nombre2) (categoria ?categoria) (pais ?pais) (comercioext ?comercioext) (venta ?venta)))
+ )
+""")
+
+clips.PrintRules()
+
+clips.Run()
+
+
 clips.PrintFacts()
-clips.Clear()
+
+
+
+
+'''
+print "Lista ! "
+lista = clips.FactList()
+for f in lista:
+    # skip initial fact
+    if f.Relation == 'empresacatpais':
+        emp_eid = f.Slots['eid']
+        emp_nombre = f.Slots['nombre']
+        emp_eid2 = f.Slots['eid2']
+        emp_nombre2 = f.Slots['nombre']
+        print "Emp Cat %s %s %s %s  " % (emp_eid,emp_nombre,emp_eid2,emp_nombre2)
+
+
+print "Lista ! "
+lista = clips.FactList()
+for f in lista:
+    # skip initial fact
+    if f.Relation == 'empvent':
+        emp_eid = f.Slots['eid']
+        emp_nombre = f.Slots['pid']
+        emp_eid2 = f.Slots['eid2']
+        emp_nombre2 = f.Slots['pid2']
+        print "Venta %s %s %s %s  " % (emp_eid,emp_nombre,emp_eid2,emp_nombre2)
+
+print "Lista ! "
+lista = clips.FactList()
+for f in lista:
+    # skip initial fact
+    if f.Relation == 'empexp':
+        emp_eid = f.Slots['eid']
+        emp_nombre = f.Slots['comercioext']
+        print "EmpExport %s %s  " % (emp_eid,emp_nombre)
+
+
+print "Lista ! "
+lista = clips.FactList()
+for f in lista:
+    # skip initial fact
+    if f.Relation == 'grupoexportacion':
+        emp_eid = f.Slots['eid']
+        emp_nombre = f.Slots['comercioext']
+        print "Grupo Exp %s %s  " % (emp_eid,emp_nombre)
+
+
+'''
 

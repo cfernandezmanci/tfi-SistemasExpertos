@@ -26,8 +26,25 @@ def formuUbicacionEmpresaPais(pais1,pais2):
     valor = paisAnalisis.setPaises(pais1,pais2)
     return valor
 
-def formuTerminoBusqueda(tipo,termino):
+def formuTerminoBusqueda(entidad,termino):
     '''FORMULA BUSQUEDA'''
+    if entidad == "COMENTARIOS":
+        busquedaAnalisis = pyClasses.Comentarios(DIRECTORIO+"comentarios_1.csv")
+        valor = busquedaAnalisis.buscarTermino(termino)
+        return valor
 
+    if entidad == "EMPRESAS":
+        empresaAnalisis = pyClasses.Empresas(DIRECTORIO + "empresas_1.csv")
+        valor = empresaAnalisis.buscarTermino(termino)
+        return valor
 
+    if entidad == "VENTAS":
+        ventaAnalisis = pyClasses.Ventas(DIRECTORIO + "productos_1.csv")
+        valor = ventaAnalisis.buscarTermino(termino)
+        return valor
 
+    if entidad == "COMPRAS":
+        compraAnalisis = pyClasses.Compras(DIRECTORIO + "servicios_1.csv")
+        valor = compraAnalisis.buscarTermino(termino)
+        #print compraAnalisis.listarCompras()
+        return valor

@@ -1,5 +1,6 @@
 import clips
 import csv
+import sys
 
 class Entidad():
     def __init__(self):
@@ -62,6 +63,19 @@ class Empresas():
             if row1[0] == empresa:
                 return row1[7]
 
+        return 0
+
+    def buscarTermino(self,termino):
+        empresaDatos = Entidad()
+        empresaDatos.putArchivo(self.archivoEmpresas)
+        empresaDatos.leerArchivo()
+        empresas = empresaDatos.getDatosArchivo()
+
+        for row1 in iter(empresas):
+            valor = str(row1[1]).lower()
+            valorrta = valor.find(termino.lower())
+            if valorrta > 0:
+                return row1[0]
         return 0
 
 
@@ -139,18 +153,85 @@ class Paises():
             return "MUNDIAL"
 
 
-class comentarios():
+class Comentarios():
     def __init__(self, archivoCom):
         self.archivoComentarios = archivoCom
 
-        def setArchivoComentarios(self, archivo):
+    def setArchivoComentarios(self, archivo):
             self.archivoComentarios = archivo
 
-        def getComentarios(self):
-            comentarioDatos = Entidad()
-            comentarioDatos.putArchivo(self.archivoComentarios)
-            comentarioDatos.leerArchivo()
-            comentarios = comentarioDatos.getDatosArchivo()
+    def listarComentarios(self):
+        comentarioDatos = Entidad()
+        comentarioDatos.putArchivo(self.archivoComentarios)
+        comentarioDatos.leerArchivo()
+        comentarios = comentarioDatos.getDatosArchivo()
 
-            return comentarios
+        return comentarios
 
+    def buscarTermino(self,termino):
+        comentarioDatos = Entidad()
+        comentarioDatos.putArchivo(self.archivoComentarios)
+        comentarioDatos.leerArchivo()
+        comentarios = comentarioDatos.getDatosArchivo()
+
+        for row1 in iter(comentarios):
+            valor = str(row1[4]).lower()
+            valorrta = valor.find(termino.lower())
+            if valorrta > 0:
+                return row1[2]
+        return 0
+
+class Ventas():
+    def __init__(self, archivoVen):
+        self.archivoVentas = archivoVen
+
+    def setArchivoVentas(self, archivo):
+            self.archivoVentas = archivo
+
+    def listarVentas(self):
+        VentaDatos = Entidad()
+        VentaDatos.putArchivo(self.archivoVentas)
+        VentaDatos.leerArchivo()
+        ventas = VentaDatos.getDatosArchivo()
+        return ventas
+
+    def buscarTermino(self,termino):
+        VentaDatos = Entidad()
+        VentaDatos.putArchivo(self.archivoVentas)
+        VentaDatos.leerArchivo()
+        ventas = VentaDatos.getDatosArchivo()
+
+        for row1 in iter(ventas):
+            valor = str(row1[2]).lower()
+            valorrta = valor.find(termino.lower())
+            if valorrta > 0:
+                return row1[0]
+        return 0
+
+
+class Compras():
+    def __init__(self, archivoComp):
+        self.archivoCompras = archivoComp
+
+    def setArchivoCompras(self, archivo):
+            self.archivoCompras = archivo
+
+    def listarCompras(self):
+        CompraDatos = Entidad()
+        CompraDatos.putArchivo(self.archivoCompras)
+        CompraDatos.leerArchivo()
+        compras = CompraDatos.getDatosArchivo()
+        return compras
+
+    def buscarTermino(self,termino):
+        CompraDatos = Entidad()
+        CompraDatos.putArchivo(self.archivoCompras)
+        CompraDatos.leerArchivo()
+        compras = CompraDatos.getDatosArchivo()
+
+        for row1 in iter(compras):
+            valor = str(row1[2]).lower()
+            valorrta = valor.find(termino.lower())
+            if valorrta > 0:
+                return row1[0]
+        return 0
