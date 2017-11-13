@@ -9,8 +9,13 @@ clips.Reset()
 
 
 '''DEFINICIONES'''
+
+#NPC MyHome  Local
+DIRECTORIO = "/home/christian/tfiClips/"
+
+
 #Notebook Dell Local
-DIRECTORIO = "/home/christian/Documents/TFI/clips/"
+#DIRECTORIO = "/home/christian/Documents/TFI/clips/"
 
 #Notebook HP BBT Local
 #DIRECTORIO = "/home/fernandezc/PycharmProjects/TFIClips/"
