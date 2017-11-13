@@ -4,7 +4,8 @@ import pyClasses
 
 
 '''DEFINICIONES'''
-#????
+
+#Ver????
 #DIRECTORIO = "/home/christian/tfiClips/"
 
 #Notebook HP BBT

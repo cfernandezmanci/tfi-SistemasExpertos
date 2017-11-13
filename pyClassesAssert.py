@@ -9,7 +9,7 @@ clips.Reset()
 
 
 '''DEFINICIONES'''
-#????
+#Ver ????
 #DIRECTORIO = "/home/christian/tfiClips/"
 
 #Notebook HP BBT
