@@ -17,6 +17,9 @@ valor = pyFormulas.formuUbicacionEmpresaPais("VENEZUELA","ARGENTINA")
 print valor
 
 
+valor = pyFormulas.formuUbicacionEmpresaPais("FRANCIA","ARGENTINA")
+print valor
+
 
 valor =pyFormulas.formuPuntajeEmpresa("273")
 print valor

@@ -5,11 +5,11 @@ import pyClasses
 
 '''DEFINICIONES'''
 
-#Ver?????
-#DIRECTORIO = "/home/christian/tfiClips/"
+#Notebook Dell Local
+DIRECTORIO = "/home/christian/Documents/TFI/clips/"
 
-#Notebook HP BBT
-DIRECTORIO = "/home/fernandezc/PycharmProjects/TFIClips/"
+#Notebook HP BBT Local
+#DIRECTORIO = "/home/fernandezc/PycharmProjects/TFIClips/"
 
 
 def formuPuntajeEmpresa(eid):
