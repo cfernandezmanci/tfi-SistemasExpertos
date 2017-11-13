@@ -147,7 +147,7 @@ class Paises():
                 if row2[0] == pais2:
                     pais2Cont = row2[1]
 
-            if pais1Cont == pais2Cont:
+            if pais1Cont.strip() == pais2Cont.strip():
                 return "REGIONAL"
 
             return "MUNDIAL"
