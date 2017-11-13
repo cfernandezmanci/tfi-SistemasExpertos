@@ -10,7 +10,7 @@ clips.Reset()
 
 '''DEFINICIONES'''
 
-DIRECTORIO = "/home/christian/tfiClips/"
+DIRECTORIO = "/home/christian/Documents/TFI/clips/"
 
 '''CARGA EMPRESAS '''
 
@@ -256,6 +256,22 @@ tempEmpCatPais = empcatpaisLista.addAssertTemplate(varClipTemplateNombre,varClip
 empcatpaisLista.leeAssertTemplate(tempEmpCatPais)
 
 
+empcatLista = pyClasses.Entidad()
+
+varClipTemplateNombre = """empresacat"""
+varClipTemplateDatos = """
+    (slot eid (type INTEGER))
+    (slot nombre (type STRING))
+    (slot eid2 (type INTEGER))
+    (slot nombre2 (type STRING))        
+    (slot categoria (type STRING))
+ """
+varClipTemplateComentario = """Template para EmpresasCategoria"""
+
+tempempcate = empcatLista.addAssertTemplate(varClipTemplateNombre,varClipTemplateDatos,varClipTemplateComentario)
+empcatLista.leeAssertTemplate(tempempcate)
+
+
 
 '''CARGA POOLCOMPRAS '''
 
@@ -312,6 +328,18 @@ clips.SendCommand("""
   (assert(empresacatpais (eid ?eid) (nombre ?nombre) (eid2 ?eid2) (nombre2 ?nombre2) (categoria ?categoria) (pais ?pais) ))
  )
 """)
+
+
+clips.SendCommand("""
+(defrule empcat
+  (empresa (eid ?eid)(nombre ?nombre) (categoria ?categoria))         
+  (empresa (eid ?eid2)(nombre ?nombre2) (categoria ?categoria2))
+   (and(test(eq ?categoria ?categoria2)) (test(neq ?eid ?eid2)))  
+  =>
+  (assert(empresacat (eid ?eid) (nombre ?nombre) (eid2 ?eid2) (nombre2 ?nombre2) (categoria ?categoria) ))
+ )
+""")
+
 
 clips.SendCommand("""
 (defrule empresaventa

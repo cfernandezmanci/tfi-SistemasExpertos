@@ -7,6 +7,12 @@ print valor
 valor = pyFormulas.formuUbicacionEmpresaPais("ARGENTINA","ESPANA")
 print valor
 
+valor = pyFormulas.formuUbicacionEmpresaPais("CHILE","URUGUAY")
+print valor
+
+valor = pyFormulas.formuUbicacionEmpresaPais("ARGENTINA","ECUADOR")
+print valor
+
 valor = pyFormulas.formuUbicacionEmpresaPais("VENEZUELA","ARGENTINA")
 print valor
 
