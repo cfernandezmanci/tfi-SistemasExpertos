@@ -9,8 +9,11 @@ clips.Reset()
 
 
 '''DEFINICIONES'''
+#????
+#DIRECTORIO = "/home/christian/tfiClips/"
 
-DIRECTORIO = "/home/christian/Documents/TFI/clips/"
+#Notebook HP BBT
+DIRECTORIO = "/home/fernandezc/PycharmProjects/TFIClips/"
 
 '''CARGA EMPRESAS '''
 

@@ -7,7 +7,11 @@ import pyClasses
 
 '''DEFINICIONES'''
 
-DIRECTORIO = "/home/christian/tfiClips/"
+#????
+#DIRECTORIO = "/home/christian/tfiClips/"
+
+#Notebook HP BBT
+DIRECTORIO = "/home/fernandezc/PycharmProjects/TFIClips/"
 
 
 def formuPuntajeEmpresa(eid):
