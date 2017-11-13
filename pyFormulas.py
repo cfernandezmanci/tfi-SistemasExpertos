@@ -3,10 +3,7 @@ import csv
 import pyClasses
 
 
-
-
 '''DEFINICIONES'''
-
 #????
 #DIRECTORIO = "/home/christian/tfiClips/"
 

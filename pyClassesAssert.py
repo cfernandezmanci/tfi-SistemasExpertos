@@ -15,6 +15,7 @@ clips.Reset()
 #Notebook HP BBT
 DIRECTORIO = "/home/fernandezc/PycharmProjects/TFIClips/"
 
+
 '''CARGA EMPRESAS '''
 
 emplista = pyClasses.Entidad()
