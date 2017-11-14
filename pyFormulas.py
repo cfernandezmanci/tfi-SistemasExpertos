@@ -53,5 +53,4 @@ def formuTerminoBusqueda(entidad,termino):
     if entidad == "COMPRAS":
         compraAnalisis = pyClasses.Compras(DIRECTORIO + "servicios_1.csv")
         valor = compraAnalisis.buscarTermino(termino)
-        #print compraAnalisis.listarCompras()
         return valor
