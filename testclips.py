@@ -1,4 +1,6 @@
 import clips
+import pyFormulas
+
 
 clips.Clear()
 clips.Reset()
@@ -8,8 +10,11 @@ clips.DebugConfig.ActivationsWatched = True
 
 #Area de Funciones Py
 
-def py_square(x):
-    return  x*x
+def py_square(x,y):
+    return  x*y
+
+def py_string(x,y):
+    return  str(x) +' - '+ str(y)
 
 #Fin Area de Funciones Py
 
@@ -30,7 +35,13 @@ print fl
 clips.PrintFacts()
 
 # llama Funcion Pyton e imprime
-print clips.Eval("(python-call py_square 4)")
+print clips.Eval("(python-call py_square 4 3)")
+
+clips.RegisterPythonFunction(py_string)
+# llama Funcion Pyton e imprime
+print clips.Eval("(python-call py_string ARGENTINA CHILE)")
 
 
-
+clips.RegisterPythonFunction(pyFormulas.formuUbicacionEmpresaPais)
+# llama Funcion Pyton e imprime
+print clips.Eval("(python-call formuUbicacionEmpresaPais VENEZUELA ARGENTINA)")

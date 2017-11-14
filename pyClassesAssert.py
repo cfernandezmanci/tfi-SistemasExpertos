@@ -1,11 +1,16 @@
 import clips
 import pyClasses
+import pyFormulas
 
 #Clips Clear
 clips.Clear()
 
 #Clips Reset
 clips.Reset()
+
+'''DEFINICION FUNCIONES'''
+
+clips.RegisterPythonFunction(pyFormulas.formuUbicacionEmpresaPais)
 
 
 '''DEFINICIONES'''
@@ -19,6 +24,8 @@ DIRECTORIO = "/home/christian/tfiClips/"
 
 #Notebook HP BBT Local
 #DIRECTORIO = "/home/fernandezc/PycharmProjects/TFIClips/"
+
+
 
 '''CARGA EMPRESAS '''
 
@@ -270,8 +277,10 @@ varClipTemplateNombre = """empresacat"""
 varClipTemplateDatos = """
     (slot eid (type INTEGER))
     (slot nombre (type STRING))
+    (slot pais (type STRING))
     (slot eid2 (type INTEGER))
-    (slot nombre2 (type STRING))        
+    (slot nombre2 (type STRING))
+    (slot pais2 (type STRING))        
     (slot categoria (type STRING))
  """
 varClipTemplateComentario = """Template para EmpresasCategoria"""
@@ -314,12 +323,35 @@ varClipTemplateDatos = """
     (slot categoria (type STRING))
     (slot pais (type STRING))
     (slot comercioext (type STRING))        
-    (slot venta (type STRING))
+    (slot venta (type STRING))    
  """
 varClipTemplateComentario = """Es Template Grupo de Exportacion"""
 
 tempGrupoExp = poolComprasLista.addAssertTemplate(varClipTemplateNombre,varClipTemplateDatos,varClipTemplateComentario)
 grupoExportacionLista.leeAssertTemplate(tempGrupoExp)
+
+
+
+'''CARGA ALIANZAESTRATEGICA'''
+
+alianzaEstrategicaLista = pyClasses.Entidad()
+
+varClipTemplateNombre = """alianzaestrategica"""
+varClipTemplateDatos = """
+    (slot eid (type INTEGER))
+    (slot nombre (type STRING))
+    (slot eid2 (type INTEGER))
+    (slot nombre2 (type STRING))
+    (slot categoria (type STRING))    
+    (slot venta (type STRING))
+    (slot compra (type STRING))
+ """
+varClipTemplateComentario = """Es Template Alianza Estrategica"""
+
+tempAliEst = poolComprasLista.addAssertTemplate(varClipTemplateNombre,varClipTemplateDatos,varClipTemplateComentario)
+alianzaEstrategicaLista.leeAssertTemplate(tempAliEst)
+
+
 
 
 ''' REGLAS '''
@@ -340,11 +372,11 @@ clips.SendCommand("""
 
 clips.SendCommand("""
 (defrule empcat
-  (empresa (eid ?eid)(nombre ?nombre) (categoria ?categoria))         
-  (empresa (eid ?eid2)(nombre ?nombre2) (categoria ?categoria2))
+  (empresa (eid ?eid)(nombre ?nombre) (categoria ?categoria) (pais ?pais) )         
+  (empresa (eid ?eid2)(nombre ?nombre2) (categoria ?categoria2) (pais ?pais2) )
    (and(test(eq ?categoria ?categoria2)) (test(neq ?eid ?eid2)))  
   =>
-  (assert(empresacat (eid ?eid) (nombre ?nombre) (eid2 ?eid2) (nombre2 ?nombre2) (categoria ?categoria) ))
+  (assert(empresacat (eid ?eid) (nombre ?nombre) (pais ?pais) (eid2 ?eid2) (nombre2 ?nombre2) (pais2 ?pais2) (categoria ?categoria) ))
  )
 """)
 
@@ -401,14 +433,30 @@ clips.SendCommand("""
  )
 """)
 
+
+
+
+clips.SendCommand("""
+(defrule alienzaestrategica
+  (empresacat (eid ?eid) (nombre ?nombre) (pais ?pais) (eid2 ?eid2) (nombre2 ?nombre2) (pais2 ?pais2) (categoria ?categoria))
+  (empvent (pid ?evpid) (eid ?eveid) (pid2 ?evpid2) (eid2 ?eveid2) (nombre ?venta))
+  (empcomp (sid ?ecsid) (sid2 ?ecsid2) (eid ?eceid) (eid2 ?eceid2) (nombre ?compra))  
+  (and (test(eq ?eveid ?eid)) (test(eq ?eveid2 ?eid2)) (test(eq ?eceid ?eid)) (test(eq ?eceid2 ?eid2))
+       (test(eq LOCAL (python-call formuUbicacionEmpresaPais ?pais ?pais2) ))  
+          )  
+  =>
+  (assert(alianzaestrategica (eid ?eid) (nombre ?nombre) (eid2 ?eid2) (nombre2 ?nombre2) (categoria ?categoria) (venta ?venta) (compra ?compra)  )) 
+ )
+""")
+
+
+
 clips.PrintRules()
 
 clips.Run()
 
 
-clips.PrintFacts()
-
-
+#clips.PrintFacts()
 
 
 '''
@@ -453,7 +501,19 @@ for f in lista:
         emp_eid = f.Slots['eid']
         emp_nombre = f.Slots['comercioext']
         print "Grupo Exp %s %s  " % (emp_eid,emp_nombre)
-
-
 '''
 
+print "Lista ! "
+lista = clips.FactList()
+for f in lista:
+    # skip initial fact
+    if f.Relation == 'alianzaestrategica':
+        emp_eid = f.Slots['eid']
+        emp_nombre = f.Slots['nombre']
+        print "Alianza Est %s %s  " % (emp_eid,emp_nombre)
+
+
+
+
+# llama Funcion Pyton e imprime
+#print clips.Eval("(python-call formuUbicacionEmpresaPais ARGENTINA ARGENTINA)")
