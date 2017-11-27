@@ -340,15 +340,18 @@ varClipTemplateNombre = """alianzaestrategica"""
 varClipTemplateDatos = """
     (slot eid (type INTEGER))
     (slot nombre (type STRING))
+    (slot pais (type STRING))
     (slot eid2 (type INTEGER))
     (slot nombre2 (type STRING))
-    (slot categoria (type STRING))    
+    (slot pais2 (type STRING))
+    (slot categoria (type STRING)) 
+    (slot tipopais (type STRING))   
     (slot venta (type STRING))
     (slot compra (type STRING))
  """
 varClipTemplateComentario = """Es Template Alianza Estrategica"""
 
-tempAliEst = poolComprasLista.addAssertTemplate(varClipTemplateNombre,varClipTemplateDatos,varClipTemplateComentario)
+tempAliEst = alianzaEstrategicaLista.addAssertTemplate(varClipTemplateNombre,varClipTemplateDatos,varClipTemplateComentario)
 alianzaEstrategicaLista.leeAssertTemplate(tempAliEst)
 
 
@@ -441,79 +444,55 @@ clips.SendCommand("""
   (empresacat (eid ?eid) (nombre ?nombre) (pais ?pais) (eid2 ?eid2) (nombre2 ?nombre2) (pais2 ?pais2) (categoria ?categoria))
   (empvent (pid ?evpid) (eid ?eveid) (pid2 ?evpid2) (eid2 ?eveid2) (nombre ?venta))
   (empcomp (sid ?ecsid) (sid2 ?ecsid2) (eid ?eceid) (eid2 ?eceid2) (nombre ?compra))  
-  (and (test(eq ?eveid ?eid)) (test(eq ?eveid2 ?eid2)) (test(eq ?eceid ?eid)) (test(eq ?eceid2 ?eid2))
-       (test(eq LOCAL (python-call formuUbicacionEmpresaPais ?pais ?pais2) ))  
-          )  
+  (test(eq ?eveid ?eid)) (test(eq ?eveid2 ?eid2)) (test(eq ?eceid ?eid)) (test(eq ?eceid2 ?eid2))
   =>
-  (assert(alianzaestrategica (eid ?eid) (nombre ?nombre) (eid2 ?eid2) (nombre2 ?nombre2) (categoria ?categoria) (venta ?venta) (compra ?compra)  )) 
+  (assert(alianzaestrategica (eid ?eid) (nombre ?nombre) (pais ?pais) (eid2 ?eid2) (nombre2 ?nombre2) (pais2 ?pais2) (categoria ?categoria) (venta ?venta) (compra ?compra)  )) 
  )
 """)
 
 
 
-clips.PrintRules()
-
-clips.Run()
+#clips.PrintRules()
 
 
 #clips.PrintFacts()
 
+clips.Run()
 
-'''
-print "Lista ! "
+
+print "Alianza Estrategica - Filtro PAIS"
 lista = clips.FactList()
-for f in lista:
-    # skip initial fact
-    if f.Relation == 'empresacatpais':
-        emp_eid = f.Slots['eid']
-        emp_nombre = f.Slots['nombre']
-        emp_eid2 = f.Slots['eid2']
-        emp_nombre2 = f.Slots['nombre']
-        print "Emp Cat %s %s %s %s  " % (emp_eid,emp_nombre,emp_eid2,emp_nombre2)
 
 
-print "Lista ! "
-lista = clips.FactList()
-for f in lista:
-    # skip initial fact
-    if f.Relation == 'empvent':
-        emp_eid = f.Slots['eid']
-        emp_nombre = f.Slots['pid']
-        emp_eid2 = f.Slots['eid2']
-        emp_nombre2 = f.Slots['pid2']
-        print "Venta %s %s %s %s  " % (emp_eid,emp_nombre,emp_eid2,emp_nombre2)
-
-print "Lista ! "
-lista = clips.FactList()
-for f in lista:
-    # skip initial fact
-    if f.Relation == 'empexp':
-        emp_eid = f.Slots['eid']
-        emp_nombre = f.Slots['comercioext']
-        print "EmpExport %s %s  " % (emp_eid,emp_nombre)
-
-
-print "Lista ! "
-lista = clips.FactList()
-for f in lista:
-    # skip initial fact
-    if f.Relation == 'grupoexportacion':
-        emp_eid = f.Slots['eid']
-        emp_nombre = f.Slots['comercioext']
-        print "Grupo Exp %s %s  " % (emp_eid,emp_nombre)
-'''
-
-print "Lista ! "
-lista = clips.FactList()
 for f in lista:
     # skip initial fact
     if f.Relation == 'alianzaestrategica':
         emp_eid = f.Slots['eid']
+        emp_eid2 = f.Slots['eid2']
         emp_nombre = f.Slots['nombre']
-        print "Alianza Est %s %s  " % (emp_eid,emp_nombre)
+        emp_pais = f.Slots['pais']
+        emp_pais2 = f.Slots['pais2']
+        emp_nombre2 = f.Slots['nombre2']
+        emp_categoria = f.Slots['categoria']
+        emp_venta = f.Slots['venta']
+        emp_compra = f.Slots['compra']
+        tipoPais = pyFormulas.formuUbicacionEmpresaPais(emp_pais,emp_pais2)
+        if tipoPais == "LOCAL" or tipoPais == "LIMITROFE":
+            print f.Slots
+            assertAE = """assert(alianzaestrategica (eid """+emp_eid+""") (nombre """+emp_nombre+""") (pais """+emp_pais+""") (eid2 """+emp_eid2+""") (nombre2 """+emp_nombre2+""") (pais2 """+emp_pais2+""") (categoria """+emp_categoria+""") (tipopais """+tipoPais+""" )  (venta """+emp_venta+""") (compra """+emp_compra+""") )"""
+            print assertAE
+            clips.SendCommand(assertAE)
+
+            f.Retract()
+        else:
+            f.Retract()
 
 
+print "Alianza Estrategica - Filtro PAIS OK"
+lista2 = clips.FactList()
+for f in lista2:
+    # skip initial fact
+    if f.Relation == 'alianzaestrategica':
+        print f.Slots
 
 
-# llama Funcion Pyton e imprime
-#print clips.Eval("(python-call formuUbicacionEmpresaPais ARGENTINA ARGENTINA)")

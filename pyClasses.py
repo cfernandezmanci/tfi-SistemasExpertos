@@ -94,9 +94,9 @@ class Enlaces():
 
         for row1 in iter(enlaceVal):
             if row1[0] == enlaces:
-                print row1[3]
+
                 if int(row1[3]) >= 90:
-                    return "EXELENTE"
+                    return "EXCELENTE"
                 elif int(row1[3]) >= 80:
                     return "MUY BUENO"
                 elif int(row1[3]) >= 70:
