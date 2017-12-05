@@ -235,3 +235,34 @@ class Compras():
             if valorrta > 0:
                 return row1[0]
         return 0
+
+
+class Busquedas():
+    def __init__(self, archivoBus):
+        self.archivoBusquedas = archivoBus
+
+    def setArchivoBusquedas(self, archivo):
+            self.archivoBusquedas = archivo
+
+    def listarBusquedas(self):
+        BusquedaDatos = Entidad()
+        BusquedaDatos.putArchivo(self.archivoBusquedas)
+        BusquedaDatos.leerArchivo()
+        busquedas = BusquedaDatos.getDatosArchivo()
+        return busquedas
+
+    def buscarTermino(self,termino):
+        BusquedaDatos = Entidad()
+        BusquedaDatos.putArchivo(self.archivoBusquedas)
+        BusquedaDatos.leerArchivo()
+        busquedas = BusquedaDatos.getDatosArchivo()
+
+        for row1 in iter(busquedas):
+            valor = str(row1[1]).lower()
+            valorrta = valor.find(termino.lower())
+            #print valorrta,termino, row1[1], row1[2]
+            if valorrta >= 0:
+                return row1[2]
+        return 0
+
+

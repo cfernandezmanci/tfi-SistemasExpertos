@@ -168,11 +168,10 @@ varClipTemplateDatos = """
     (slot busid (type INTEGER))
     (slot termino (type STRING))
     (slot eid (type INTEGER))
-    (slot eid2 (type INTEGER))
  """
 varClipTemplateComentario = """Es Template busqueda"""
 
-varCamposTemp = ["busid","termino","eid","eid2"]
+varCamposTemp = ["busid","termino","eid"]
 
 tempBusqueda = busquedalista.addAssertTemplate(varClipTemplateNombre,varClipTemplateDatos,varClipTemplateComentario)
 busquedalista.leeAssertTemplate(tempBusqueda)

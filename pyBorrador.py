@@ -60,3 +60,10 @@ print valor
 valor = pyFormulas.formuTerminoBusqueda("COMPRAS","goma")
 print valor
 
+print "---------------BUSQUEDA Busquedas------------------"
+
+valor = pyFormulas.formuTerminoBusqueda("BUSQUEDAS","acero")
+print valor
+
+valor = pyFormulas.formuTerminoBusqueda("BUSQUEDAS","aceite")
+print valor
