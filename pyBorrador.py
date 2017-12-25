@@ -67,3 +67,13 @@ print valor
 
 valor = pyFormulas.formuTerminoBusqueda("BUSQUEDAS","aceite")
 print valor
+
+
+print "---------------EMPRESA comercio Ext------------------"
+
+valor = pyFormulas.formuComercioExtEmpresa("273")
+print valor
+
+
+valor = pyFormulas.formuComercioExtEmpresa("3052")
+print valor

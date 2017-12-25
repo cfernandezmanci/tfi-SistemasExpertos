@@ -16,8 +16,10 @@ varClipTemplateDatos = """
     (slot nombre2 (type STRING))
     (slot pais2 (type STRING))
     (slot categoria (type STRING)) 
-    (slot tipopais (type STRING))   
+    (slot tipopais (type STRING))
+    (slot pid (type INTEGER))   
     (slot venta (type STRING))
+    (slot sid (type INTEGER))
     (slot compra (type STRING))
  """
 varClipTemplateComentario = """Es Template Alianza Estrategica"""
@@ -117,7 +119,7 @@ clips.SendCommand("""
   (empcomp (sid ?ecsid) (sid2 ?ecsid2) (eid ?eceid) (eid2 ?eceid2) (nombre ?compra))  
   (test(eq ?eveid ?eid)) (test(eq ?eveid2 ?eid2)) (test(eq ?eceid ?eid)) (test(eq ?eceid2 ?eid2))
   =>
-  (assert(alianzaestrategica (eid ?eid) (nombre ?nombre) (pais ?pais) (eid2 ?eid2) (nombre2 ?nombre2) (pais2 ?pais2) (categoria ?categoria) (venta ?venta) (compra ?compra)  )) 
+  (assert(alianzaestrategica (eid ?eid) (nombre ?nombre) (pais ?pais) (eid2 ?eid2) (nombre2 ?nombre2) (pais2 ?pais2) (categoria ?categoria) (pid ?evpid) (venta ?venta) (sid ?ecsid) (compra ?compra)  )) 
  )
 """)
 
@@ -125,14 +127,23 @@ clips.SendCommand("""
 clips.PrintRules()
 clips.Run()
 
+#NPC MyHome  Local
+import csv
+DIRECTORIO = "/home/christian/tfiClips/"
+
+with open(DIRECTORIO+"alianzaestrategica.csv", 'wb') as myfile:
+    wr = csv.writer(myfile, quoting=csv.QUOTE_ALL)
 
 
-print "Resultado - Alianz Estraategica"
-lista = clips.FactList()
-for f in lista:
-    if f.Relation == 'alianzaestrategica':
-        tipoPais = pyFormulas.formuUbicacionEmpresaPais(f.Slots["pais"],f.Slots["pais2"])
-        if tipoPais == "LOCAL" or tipoPais == "LIMITROFE":
-            print f.Slots["eid"],f.Slots["nombre"],f.Slots["pais"],f.Slots["eid2"],f.Slots["nombre2"],f.Slots["pais2"],f.Slots["categoria"],tipoPais,f.Slots["venta"],f.Slots["compra"]
+    print "Resultado - Alianza Estraategica"
+    lista = clips.FactList()
+    for f in lista:
+        if f.Relation == 'alianzaestrategica':
+            tipoPais = pyFormulas.formuUbicacionEmpresaPais(f.Slots["pais"],f.Slots["pais2"])
+            if tipoPais == "LOCAL" or tipoPais == "LIMITROFE":
+                print f.Slots["eid"],f.Slots["nombre"],f.Slots["pais"],f.Slots["eid2"],f.Slots["nombre2"],f.Slots["pais2"],f.Slots["categoria"],tipoPais,f.Slots["venta"],f.Slots["compra"]
+                wr.writerow([f.Slots["eid"],f.Slots["eid2"],tipoPais,f.Slots["pid"],f.Slots["venta"],f.Slots["sid"],f.Slots["compra"]])
+
+myfile.close()
 
 

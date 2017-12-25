@@ -70,56 +70,75 @@ for f in lista:
         print f.Slots["eid"],f.Slots["nombre"],f.Slots["pais"],f.Slots["eid2"],f.Slots["nombre2"],f.Slots["pais2"],f.Slots["comercioext"]
 
 
-print "Resultado - Posibles Clientes Exteriores en Empresas"
-lista = clips.FactList()
-for f in lista:
-    if f.Relation == 'posintbus':
-        valorempresa = f.Slots["nombre"].split()
-        for buscaterm in valorempresa:
-            valor = pyFormulas.formuTerminoBusqueda("BUSQUEDAS",buscaterm)
-            if valor > 0 and valor <> f.Slots["eid"] and f.Slots["eid2"] == valor:
-            #Encontro valores coincidentes en la busqueda
-                tipoPais = pyFormulas.formuUbicacionEmpresaPais(f.Slots["pais"], f.Slots["pais2"])
-                print  tipoPais,f.Slots["comercioext"],f.Slots["eid"],valor
+
+#NPC MyHome  Local
+import csv
+DIRECTORIO = "/home/christian/tfiClips/"
+
+with open(DIRECTORIO+"posibleinteresbusquedas.csv", 'wb') as myfile:
+    wr = csv.writer(myfile, quoting=csv.QUOTE_ALL)
 
 
 
+    print "Resultado - Posibles Clientes Exteriores en Empresas"
+    lista = clips.FactList()
+    for f in lista:
+        if f.Relation == 'posintbus':
+            valorempresa = f.Slots["nombre"].split()
+            for buscaterm in valorempresa:
+                if len(buscaterm) > 2:
+                    valor = pyFormulas.formuTerminoBusqueda("BUSQUEDAS",buscaterm)
+                else:
+                    valor = 0
 
-print "Resultado - Posibles Clientes Exteriores en Ventas"
-lista = clips.FactList()
-lista2 = clips.FactList()
-
-
-for f in lista:
-    if f.Relation == 'posintbus':
-        #print f.Slots["eid"] , f.Slots["eid2"]
-        for g in lista2:
-            if g.Relation == 'venta':
-                if f.Slots["eid"] == g.Slots["eid"]:
-                    #print f.Slots["eid"],g.Slots["eid"],g.Slots["nombre"]
-                    valor = pyFormulas.formuTerminoBusqueda("BUSQUEDAS", g.Slots["nombre"])
-
-                    if valor > 0 and valor <> f.Slots["eid"]  and valor == f.Slots["eid2"]:
-                        # Encontro valores coincidentes en la busqueda
-                        tipoPais = pyFormulas.formuUbicacionEmpresaPais(f.Slots["pais"], f.Slots["pais2"])
-                        print  tipoPais, f.Slots["comercioext"], f.Slots["eid"], f.Slots["eid2"],g.Slots["pid"]
+                if valor > 0 and valor <> f.Slots["eid"] and f.Slots["eid2"] == valor:
+                #Encontro valores coincidentes en la busqueda
+                    tipoPais = pyFormulas.formuUbicacionEmpresaPais(f.Slots["pais"], f.Slots["pais2"])
+                    print  tipoPais,f.Slots["comercioext"],f.Slots["eid"],valor
+                    wr.writerow([buscaterm,f.Slots["eid"],f.Slots["eid2"],""])
 
 
 
-print "Resultado - Posibles Clientes Exteriores en Compras"
-lista = clips.FactList()
-lista2 = clips.FactList()
+    print "Resultado - Posibles Clientes Exteriores en Ventas"
+    lista = clips.FactList()
+    lista2 = clips.FactList()
 
-for f in lista:
-    if f.Relation == 'posintbus':
-        #print f.Slots["eid"] , f.Slots["eid2"]
-        for g in lista2:
-            if g.Relation == 'compra':
-                if f.Slots["eid"] == g.Slots["eid"]:
-                    #print f.Slots["eid"],g.Slots["eid"],g.Slots["nombre"]
-                    valor = pyFormulas.formuTerminoBusqueda("BUSQUEDAS", g.Slots["nombre"])
 
-                    if valor > 0 and valor <> f.Slots["eid"]  and valor == f.Slots["eid2"]:
-                        # Encontro valores coincidentes en la busqueda
-                        tipoPais = pyFormulas.formuUbicacionEmpresaPais(f.Slots["pais"], f.Slots["pais2"])
-                        print  tipoPais, f.Slots["comercioext"], f.Slots["eid"], f.Slots["eid2"],g.Slots["sid"]
+    for f in lista:
+        if f.Relation == 'posintbus':
+            #print f.Slots["eid"] , f.Slots["eid2"]
+            for g in lista2:
+                if g.Relation == 'venta':
+                    if f.Slots["eid"] == g.Slots["eid"]:
+                        #print f.Slots["eid"],g.Slots["eid"],g.Slots["nombre"]
+                        valor = pyFormulas.formuTerminoBusqueda("BUSQUEDAS", g.Slots["nombre"])
+
+                        if valor > 0 and valor <> f.Slots["eid"]  and valor == f.Slots["eid2"]:
+                            # Encontro valores coincidentes en la busqueda
+                            tipoPais = pyFormulas.formuUbicacionEmpresaPais(f.Slots["pais"], f.Slots["pais2"])
+                            print  tipoPais, f.Slots["comercioext"], f.Slots["eid"], f.Slots["eid2"],g.Slots["pid"]
+                            wr.writerow([g.Slots["nombre"], f.Slots["eid"], f.Slots["eid2"],g.Slots["pid"]])
+
+
+    print "Resultado - Posibles Clientes Exteriores en Compras"
+    lista = clips.FactList()
+    lista2 = clips.FactList()
+
+
+
+    for f in lista:
+        if f.Relation == 'posintbus':
+            #print f.Slots["eid"] , f.Slots["eid2"]
+            for g in lista2:
+                if g.Relation == 'compra':
+                    if f.Slots["eid"] == g.Slots["eid"]:
+                        #print f.Slots["eid"],g.Slots["eid"],g.Slots["nombre"]
+                        valor = pyFormulas.formuTerminoBusqueda("BUSQUEDAS", g.Slots["nombre"])
+
+                        if valor > 0 and valor <> f.Slots["eid"]  and valor == f.Slots["eid2"]:
+                            # Encontro valores coincidentes en la busqueda
+                            tipoPais = pyFormulas.formuUbicacionEmpresaPais(f.Slots["pais"], f.Slots["pais2"])
+                            print  tipoPais, f.Slots["comercioext"], f.Slots["eid"], f.Slots["eid2"],g.Slots["sid"]
+                            wr.writerow([g.Slots["nombre"], f.Slots["eid"], f.Slots["eid2"],g.Slots["sid"]])
+
+myfile.close()

@@ -22,6 +22,12 @@ def formuPuntajeEmpresa(eid):
     valor = empresaAnalisis.setEmpresa(eid)
     return valor
 
+def formuComercioExtEmpresa(eid):
+    empresaAnalisis = pyClasses.Empresas(DIRECTORIO+"empresas_1.csv")
+    valor = empresaAnalisis.comercioext(eid)
+    return valor
+
+
 def formuValorEnlace(enid):
     enlaceAnalisis = pyClasses.Enlaces(DIRECTORIO+"enlaces_1.csv")
     valor = enlaceAnalisis.setEnlaces(enid)

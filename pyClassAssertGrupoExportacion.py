@@ -64,6 +64,7 @@ varClipTemplateDatos = """
     (slot categoria (type STRING))
     (slot pais (type STRING))
     (slot comercioext (type STRING))        
+    (slot pid (type INTEGER))
     (slot venta (type STRING))    
  """
 varClipTemplateComentario = """Es Template Grupo de Exportacion"""
@@ -114,7 +115,7 @@ clips.SendCommand("""
   (empexp (eid ?expeid) (comercioext ?comercioext))
   (and(test(eq ?eveid ?eid)) (test(eq ?eveid2 ?eid2)) )
   =>
-  (assert(grupoexportacion (eid ?eid) (nombre ?nombre) (eid2 ?eid2) (nombre2 ?nombre2) (categoria ?categoria) (pais ?pais) (comercioext ?comercioext) (venta ?venta)))
+  (assert(grupoexportacion (eid ?eid) (nombre ?nombre) (eid2 ?eid2) (nombre2 ?nombre2) (categoria ?categoria) (pais ?pais) (comercioext ?comercioext) (pid ?evpid) (venta ?venta)))
  )
 """)
 
@@ -125,8 +126,19 @@ clips.Run()
 
 
 print "Resultado - Grupo de Exportacion"
-lista = clips.FactList()
-for f in lista:
-    if f.Relation == 'grupoexportacion':
-        print f.Slots["eid"],f.Slots["nombre"],f.Slots["eid2"],f.Slots["nombre2"],f.Slots["categoria"],f.Slots["pais"],f.Slots["comercioext"],f.Slots["venta"]
 
+#NPC MyHome  Local
+import csv
+DIRECTORIO = "/home/christian/tfiClips/"
+
+with open(DIRECTORIO+"grupodeexportacion.csv", 'wb') as myfile:
+    wr = csv.writer(myfile, quoting=csv.QUOTE_ALL)
+
+
+    lista = clips.FactList()
+    for f in lista:
+        if f.Relation == 'grupoexportacion':
+            print f.Slots["eid"],f.Slots["nombre"],f.Slots["eid2"],f.Slots["nombre2"],f.Slots["categoria"],f.Slots["pais"],f.Slots["comercioext"],f.Slots["venta"]
+            wr.writerow([f.Slots["eid"],f.Slots["eid2"],f.Slots["pais"],f.Slots["categoria"],f.Slots["comercioext"],f.Slots["pid"],f.Slots["venta"]])
+
+myfile.close()

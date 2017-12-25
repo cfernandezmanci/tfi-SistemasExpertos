@@ -78,6 +78,16 @@ class Empresas():
                 return row1[0]
         return 0
 
+    def comercioext(self,eid):
+        empresaDatos = Entidad()
+        empresaDatos.putArchivo(self.archivoEmpresas)
+        empresaDatos.leerArchivo()
+        empresas = empresaDatos.getDatosArchivo()
+
+        for row2 in iter(empresas):
+            if row2[0] == eid:
+                return row2[6]
+
 
 class Enlaces():
     def __init__(self,archivoEnl):

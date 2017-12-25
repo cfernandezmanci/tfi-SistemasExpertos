@@ -1,6 +1,8 @@
 import clips
 import pyClasses
+
 import pyClassesAssertBasicos
+
 
 
 
@@ -19,6 +21,7 @@ varClipTemplateDatos = """
     (slot categoria (type STRING))
     (slot pais (type STRING))    
     (slot compra (type STRING))
+    (slot sid (type INTEGER))
  """
 varClipTemplateComentario = """Es Template poolCompras"""
 
@@ -92,18 +95,27 @@ clips.SendCommand("""
   (empcomp (sid ?ecsid) (sid2 ?ecsid2) (eid ?eceid) (eid2 ?eceid2) (nombre ?compra))
   (and(test(eq ?eceid ?eid)) (test(eq ?eceid2 ?eid2))  )  
   =>
-  (assert(poolcompras (eid ?eid) (nombre ?nombre) (eid2 ?eid2) (nombre2 ?nombre2) (categoria ?categoria) (pais ?pais) (compra ?compra)))
+  (assert(poolcompras (eid ?eid) (nombre ?nombre) (eid2 ?eid2) (nombre2 ?nombre2) (categoria ?categoria) (pais ?pais) (compra ?compra) (sid ?ecsid)  ))
  )
 """)
 
 clips.PrintRules()
 clips.Run()
 
-
-
 print "Resultado - Pool De Compras"
 lista = clips.FactList()
-for f in lista:
-    if f.Relation == 'poolcompras':
-        print f.Slots["eid"],f.Slots["nombre"],f.Slots["eid2"],f.Slots["nombre2"],f.Slots["categoria"],f.Slots["pais"],f.Slots["compra"]
+
+#NPC MyHome  Local
+import csv
+DIRECTORIO = "/home/christian/tfiClips/"
+
+with open(DIRECTORIO+"pooldecompras.csv", 'wb') as myfile:
+    wr = csv.writer(myfile, quoting=csv.QUOTE_ALL)
+
+    for f in lista:
+        if f.Relation == 'poolcompras':
+            print f.Slots["eid"],f.Slots["nombre"],f.Slots["eid2"],f.Slots["nombre2"],f.Slots["categoria"],f.Slots["pais"],f.Slots["compra"],f.Slots["sid"]
+            wr.writerow([f.Slots["eid"],f.Slots["eid2"],f.Slots["pais"],f.Slots["categoria"],f.Slots["sid"],f.Slots["compra"]])
+
+myfile.close()
 

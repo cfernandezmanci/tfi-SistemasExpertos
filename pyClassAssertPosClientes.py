@@ -58,25 +58,42 @@ clips.PrintRules()
 clips.Run()
 
 
-print "Resultado - Posibles Clientes Exteriores"
-lista = clips.FactList()
-for f in lista:
-    if f.Relation == 'posclientes':
-        valorEnl = pyFormulas.formuValorEnlace(f.Slots["enlaceid"])
-        if valorEnl == "EXCELENTE" or valorEnl == "MUY BUENO":
-            tipoPais = pyFormulas.formuUbicacionEmpresaPais(f.Slots["pais"], f.Slots["pais2"])
+#NPC MyHome  Local
+import csv
+DIRECTORIO = "/home/christian/tfiClips/"
 
-            if tipoPais == "LOCAL":
-                print f.Slots["eid"],f.Slots["nombre"],f.Slots["pais"],f.Slots["eid2"],f.Slots["nombre2"],f.Slots["pais2"],tipoPais,f.Slots["venta"]
+with open(DIRECTORIO+"posiblesclientes.csv", 'wb') as myfile:
+    wr = csv.writer(myfile, quoting=csv.QUOTE_ALL)
+
+    print "Resultado - Posibles Clientes Exteriores"
+    lista = clips.FactList()
+    for f in lista:
+        if f.Relation == 'posclientes':
+            valorEnl = pyFormulas.formuValorEnlace(f.Slots["enlaceid"])
+            if valorEnl == "EXCELENTE" or valorEnl == "MUY BUENO":
+                tipoPais = pyFormulas.formuUbicacionEmpresaPais(f.Slots["pais"], f.Slots["pais2"])
+                valorComExtEmp1 = pyFormulas.formuComercioExtEmpresa(f.Slots["eid"])
+                valorComExtEmp2 = pyFormulas.formuComercioExtEmpresa(f.Slots["eid2"])
+
+                if tipoPais == "LOCAL":
+                    print f.Slots["eid"],f.Slots["nombre"],f.Slots["pais"],f.Slots["eid2"],f.Slots["nombre2"],f.Slots["pais2"],tipoPais,f.Slots["venta"]
+                    wr.writerow([f.Slots["eid"],f.Slots["eid2"],tipoPais,valorComExtEmp2,f.Slots["enlaceid"]])
+
+                if tipoPais == "LIMITROFE":
+                    if (valorComExtEmp1 in ("EXPORTA","IMPORTA","EXPIMP")) and (valorComExtEmp2 in ("EXPORTA","IMPORTA","EXPIMP")):
+                        print f.Slots["eid"],f.Slots["nombre"],f.Slots["pais"],f.Slots["eid2"],f.Slots["nombre2"],f.Slots["pais2"],tipoPais,f.Slots["venta"]
+                        wr.writerow([f.Slots["eid"], f.Slots["eid2"], tipoPais, valorComExtEmp2, f.Slots["enlaceid"]])
+
+                if tipoPais == "REGIONAL":
+                    if (valorComExtEmp1 in ("EXPORTA","IMPORTA","EXPIMP")) and (valorComExtEmp2 in ("EXPORTA","IMPORTA","EXPIMP")):
+                        print f.Slots["eid"], f.Slots["nombre"], f.Slots["pais"], f.Slots["eid2"], f.Slots["nombre2"], f.Slots["pais2"], tipoPais, f.Slots["venta"]
+                        wr.writerow([f.Slots["eid"], f.Slots["eid2"], tipoPais,valorComExtEmp2 , f.Slots["enlaceid"]])
+
+                if tipoPais == "MUNDIAL":
+                    if (valorComExtEmp1 in ("EXPORTA","IMPORTA","EXPIMP")) and (valorComExtEmp2 in ("EXPORTA","IMPORTA","EXPIMP")):
+                        print f.Slots["eid"], f.Slots["nombre"], f.Slots["pais"], f.Slots["eid2"], f.Slots["nombre2"], f.Slots["pais2"], tipoPais, f.Slots["venta"]
+                        wr.writerow([f.Slots["eid"], f.Slots["eid2"], tipoPais, valorComExtEmp2, f.Slots["enlaceid"]])
 
 
-            if tipoPais == "LIMITROFE":
-                print f.Slots["eid"],f.Slots["nombre"],f.Slots["pais"],f.Slots["eid2"],f.Slots["nombre2"],f.Slots["pais2"],tipoPais,f.Slots["venta"]
 
-            if tipoPais == "REGIONAL":
-                print f.Slots["eid"], f.Slots["nombre"], f.Slots["pais"], f.Slots["eid2"], f.Slots["nombre2"], f.Slots["pais2"], tipoPais, f.Slots["venta"]
-            
-            if tipoPais == "MUNDIAL":
-                print f.Slots["eid"], f.Slots["nombre"], f.Slots["pais"], f.Slots["eid2"], f.Slots["nombre2"], f.Slots["pais2"], tipoPais, f.Slots["venta"]
-
-
+myfile.close()

@@ -60,27 +60,99 @@ for f in lista:
 
 print "--------------------------------------------"
 
-print "Resultado - interes Visitas Gral CLIPs"
-lista = clips.FactList()
-for f in lista:
-    if f.Relation == 'posintvisgral':
-        #print f.Slots["tipovisita"],f.Slots["eid"],f.Slots["nombre"],f.Slots["pais"],f.Slots["comercioext"],f.Slots["eid2"],f.Slots["nombre2"],f.Slots["pais2"],f.Slots["comercioext2"]
-        tipoPais = pyFormulas.formuUbicacionEmpresaPais(f.Slots["pais"], f.Slots["pais2"])
 
-        if tipoPais == "LOCAL":
-            print "LOCAL",f.Slots["tipovisita"], f.Slots["eid"],f.Slots["eid2"]
+#NPC MyHome  Local
+import csv
+DIRECTORIO = "/home/christian/tfiClips/"
 
-        if tipoPais == "LIMITROFE":
-            if (f.Slots["comercioext"] in ("EXPORTA","IMPORTA","EXPIMP"))  and (f.Slots["comercioext2"] in ("EXPORTA", "IMPORTA", "EXPIMP")):
-                print "LIMITROFE", f.Slots["tipovisita"], f.Slots["eid"], f.Slots["eid2"]
+#Cargo Enlaces (Vtas Cpras)
 
-        if tipoPais == "REGIONAL":
-            if (f.Slots["comercioext"] in ("EXPORTA", "IMPORTA", "EXPIMP")) and (f.Slots["comercioext2"] in ("EXPORTA", "IMPORTA", "EXPIMP")):
-                print "REGIONAL", f.Slots["tipovisita"], f.Slots["eid"], f.Slots["eid2"]
-
-        if tipoPais == "MUNDIAL":
-            if (f.Slots["comercioext"] in ("EXPORTA", "IMPORTA", "EXPIMP"))  and (f.Slots["comercioext2"] in ("EXPORTA", "IMPORTA", "EXPIMP")):
-                print "MUNDIAL", f.Slots["tipovisita"], f.Slots["eid"], f.Slots["eid2"]
+enlaceLista = pyClasses.Entidad()
+enlaceLista.putArchivo(DIRECTORIO + "enlaces_1.csv")
+enlaceLista.leerArchivo()
+enlace = enlaceLista.getDatosArchivo()
 
 
 
+with open(DIRECTORIO+"posibleinteresvisitas.csv", 'wb') as myfile:
+    wr = csv.writer(myfile, quoting=csv.QUOTE_ALL)
+
+
+
+    print "Resultado - interes Visitas Gral CLIPs"
+    lista = clips.FactList()
+    for f in lista:
+        if f.Relation == 'posintvisgral':
+            #print f.Slots["tipovisita"],f.Slots["eid"],f.Slots["nombre"],f.Slots["pais"],f.Slots["comercioext"],f.Slots["eid2"],f.Slots["nombre2"],f.Slots["pais2"],f.Slots["comercioext2"]
+            tipoPais = pyFormulas.formuUbicacionEmpresaPais(f.Slots["pais"], f.Slots["pais2"])
+
+            if tipoPais == "LOCAL":
+                print "LOCAL",f.Slots["tipovisita"], f.Slots["eid"],f.Slots["eid2"]
+                if f.Slots["tipovisita"] =="EMPRESA":
+                    wr.writerow([f.Slots["tipovisita"], tipoPais, f.Slots["comercioext"], f.Slots["eid"], f.Slots["eid2"],""])
+
+                if f.Slots["tipovisita"] == "VENTA":
+                    for data in enlace:
+                        if data[1] == "V" and data[6] == f.Slots["eid"] and data[7] == f.Slots["eid2"]:
+                            wr.writerow([f.Slots["tipovisita"], tipoPais, f.Slots["comercioext"], f.Slots["eid"], f.Slots["eid2"],data[4]])
+
+                if f.Slots["tipovisita"] == "COMPRA":
+                    for enlace in data:
+                        if data[1] == "C" and data[6] ==  f.Slots["eid"] and data[7] == f.Slots["eid2"]:
+                            wr.writerow([f.Slots["tipovisita"], tipoPais, f.Slots["comercioext"], f.Slots["eid"], f.Slots["eid2"],data[5]])
+
+            if tipoPais == "LIMITROFE":
+                if (f.Slots["comercioext"] in ("EXPORTA","IMPORTA","EXPIMP"))  and (f.Slots["comercioext2"] in ("EXPORTA", "IMPORTA", "EXPIMP")):
+
+                    if f.Slots["tipovisita"] == "EMPRESA":
+                        print "LIMITROFE", f.Slots["tipovisita"], f.Slots["eid"], f.Slots["eid2"],""
+                        wr.writerow([f.Slots["tipovisita"],tipoPais, f.Slots["comercioext"], f.Slots["eid"], f.Slots["eid2"],""])
+
+                        if f.Slots["tipovisita"] == "VENTA":
+                            for data in enlace:
+                                if data[1] == "V" and data[6] ==  f.Slots["eid"] and data[7] == f.Slots["eid2"]:
+                                    wr.writerow([f.Slots["tipovisita"], tipoPais, f.Slots["comercioext"], f.Slots["eid"], f.Slots["eid2"],data[4]])
+
+                        if f.Slots["tipovisita"] == "COMPRA":
+                            for enlace in data:
+                                if data[1] == "C" and data[6] ==  f.Slots["eid"] and data[7] == f.Slots["eid2"]:
+                                    wr.writerow([f.Slots["tipovisita"], tipoPais, f.Slots["comercioext"], f.Slots["eid"], f.Slots["eid2"],data[5]])
+
+
+
+            if tipoPais == "REGIONAL":
+                if (f.Slots["comercioext"] in ("EXPORTA", "IMPORTA", "EXPIMP")) and (f.Slots["comercioext2"] in ("EXPORTA", "IMPORTA", "EXPIMP")):
+
+                    if f.Slots["tipovisita"] == "EMPRESA":
+                        print "REGIONAL", f.Slots["tipovisita"], f.Slots["eid"], f.Slots["eid2"],""
+                        wr.writerow([f.Slots["tipovisita"],tipoPais, f.Slots["comercioext"], f.Slots["eid"], f.Slots["eid2"],""])
+
+                        if f.Slots["tipovisita"] == "VENTA":
+                            for data in enlace:
+                                if data[1] == "V" and data[6] ==  f.Slots["eid"] and data[7] == f.Slots["eid2"]:
+                                    wr.writerow([f.Slots["tipovisita"], tipoPais, f.Slots["comercioext"], f.Slots["eid"], f.Slots["eid2"],data[4]])
+
+                        if f.Slots["tipovisita"] == "COMPRA":
+                            for enlace in data:
+                                if data[1] == "C" and data[6] ==  f.Slots["eid"] and data[7] == f.Slots["eid2"]:
+                                    wr.writerow([f.Slots["tipovisita"], tipoPais, f.Slots["comercioext"], f.Slots["eid"], f.Slots["eid2"],data[5]])
+
+
+            if tipoPais == "MUNDIAL":
+                if (f.Slots["comercioext"] in ("EXPORTA", "IMPORTA", "EXPIMP"))  and (f.Slots["comercioext2"] in ("EXPORTA", "IMPORTA", "EXPIMP")):
+                    if f.Slots["tipovisita"] == "EMPRESA":
+                        print "MUNDIAL", f.Slots["tipovisita"], f.Slots["eid"], f.Slots["eid2"],""
+                        wr.writerow([f.Slots["tipovisita"],tipoPais,f.Slots["comercioext"], f.Slots["eid"], f.Slots["eid2"],""])
+
+                        if f.Slots["tipovisita"] == "VENTA":
+                            for data in enlace:
+                                if data[1] == "V" and data[6] ==  f.Slots["eid"] and data[7] == f.Slots["eid2"]:
+                                    wr.writerow([f.Slots["tipovisita"], tipoPais, f.Slots["comercioext"], f.Slots["eid"], f.Slots["eid2"],data[4]])
+
+                        if f.Slots["tipovisita"] == "COMPRA":
+                            for enlace in data:
+                                if data[1] == "C" and data[6] ==  f.Slots["eid"] and data[7] == f.Slots["eid2"]:
+                                    wr.writerow([f.Slots["tipovisita"], tipoPais, f.Slots["comercioext"], f.Slots["eid"], f.Slots["eid2"],data[5]])
+
+
+myfile.close()
