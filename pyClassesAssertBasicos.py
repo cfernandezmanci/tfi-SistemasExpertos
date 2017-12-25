@@ -201,6 +201,29 @@ accesolista.leeAssertTemplate(tempAcceso)
 accesolista.putAssertTemplate(tempAcceso,varCamposTemp,acces)
 
 
+'''CARGA VISITAS'''
+
+visitalista = pyClasses.Entidad()
+visitalista.putArchivo(DIRECTORIO + "reg_empresavisitada_1.csv")
+visitalista.leerArchivo()
+visita = visitalista.getDatosArchivo()
+
+
+varClipTemplateNombre = """visitas"""
+varClipTemplateDatos = """
+    (slot vid (type INTEGER))
+    (slot eid (type INTEGER))
+    (slot veid (type INTEGER))
+    (slot tipo (type STRING))
+    (slot fecha (type STRING))
+ """
+varClipTemplateComentario = """Es Template visitas"""
+
+varCamposTemp = ["vid","eid","veid","tipo","fecha"]
+
+tempvisita = visitalista.addAssertTemplate(varClipTemplateNombre,varClipTemplateDatos,varClipTemplateComentario)
+visitalista.leeAssertTemplate(tempvisita)
+visitalista.putAssertTemplate(tempvisita,varCamposTemp,visita)
 
 
 
