@@ -77,3 +77,10 @@ print valor
 
 valor = pyFormulas.formuComercioExtEmpresa("3052")
 print valor
+
+print "---------------------------------"
+
+
+print '{:10} {:30} {:20}'.format('eid','nombre','Tipo')
+print '{:10} {:30} {:20}'.format('1234','Prueba Nombre','Grandes Empresas')
+print '{:10} {:30} {:20}'.format('123334','Prueba Nombre Dos','Pymes')

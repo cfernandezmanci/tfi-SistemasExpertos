@@ -88,6 +88,17 @@ class Empresas():
             if row2[0] == eid:
                 return row2[6]
 
+    def listar(self):
+        empresaDatos = Entidad()
+        empresaDatos.putArchivo(self.archivoEmpresas)
+        empresaDatos.leerArchivo()
+        empresas = empresaDatos.getDatosArchivo()
+
+
+        print '{:10} {:80} {:20} {:60} {:20} {:20} {:10} {:3}'.format('EID','NOMBRE','TIPO','CATEG.','PAIS','CIUDAD','COM.EXT.','PJE.')
+        print 235 * "-"
+        for data in iter(empresas):
+            print '{:10} {:80} {:20} {:60} {:20} {:20} {:10} {:3}'.format(data[0],data[1],data[2],data[3],data[4],data[5],data[6],data[7])
 
 class Enlaces():
     def __init__(self,archivoEnl):
@@ -217,6 +228,18 @@ class Ventas():
             if valorrta > 0:
                 return row1[0]
         return 0
+
+    def listar(self):
+        VentaDatos = Entidad()
+        VentaDatos.putArchivo(self.archivoVentas)
+        VentaDatos.leerArchivo()
+        ventas = VentaDatos.getDatosArchivo()
+
+        print '{:10} {:10} {:80} {:10} {:10} {:5}'.format('PID','EID','NOMBRE','IMPORTE','MONEDA','PROMO')
+        print 135 * "-"
+        for data in iter(ventas):
+            print '{:10} {:10} {:80} {:10} {:10} {:5}'.format(data[0],data[1],data[2],data[3],data[4],data[5])
+
 
 
 class Compras():
